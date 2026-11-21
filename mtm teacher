@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d1117">
+  
+  <title>Modasa Telethon 2026</title>
+
+  <!-- Social Media Link Preview Meta Tags -->
+  <meta property="og:title" content="Modasa Telethon 2026" />
+  <meta property="og:description" content="Live Department Staff Ranking Dashboard" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    html, body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      margin: 0;
+      padding: 20px 10px 30px 10px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    /* LOGIN STYLES */
+    #login-box {
+      background: #161b22;
+      padding: 25px 20px;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      text-align: center;
+      margin-top: 40px;
+    }
+    #login-box h2 {
+      margin-top: 0;
+      color: #58a6ff;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      background: #0d1117;
+      color: #fff;
+      font-size: 16px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #238636;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn:hover { background: #2ea043; }
+    #error-msg { color: #f85149; font-size: 14px; margin-top: 10px; display: none; }
+
+    /* DASHBOARD STYLES */
+    #dashboard { display: none; }
+    .header { text-align: center; margin-bottom: 15px; }
+    .header h1 { color: #58a6ff; font-size: 22px; margin: 0 0 5px 0; }
+    .header p { color: #8b949e; font-size: 13px; margin: 0; }
+    
+    .edit-btn {
+      display: none;
+      width: 100%;
+      text-align: center;
+      background: #1f6feb;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    /* TEAM MATCH SECTION */
+    .match-card-wrapper {
+      background: #161b22;
+      border: 1.5px solid #238636;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(35, 134, 54, 0.25);
+      display: none;
+    }
+    .match-title-header {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffb703;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      border-bottom: 1px dashed #30363d;
+      padding-bottom: 6px;
+    }
+    .match-versus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .match-user-box {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .match-user-box.winner {
+      border: 1.5px solid #ffd700;
+      background: #1c1a00;
+    }
+    .match-user-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #f0f6fc;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+    .match-user-amt {
+      font-size: 15px;
+      font-weight: 800;
+      color: #3fb950;
+    }
+    .match-user-box.winner .match-user-amt {
+      color: #ffd700;
+    }
+    .winner-tag {
+      font-size: 10px;
+      font-weight: bold;
+      color: #000;
+      background: #ffd700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .match-diff-footer {
+      text-align: center;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #30363d;
+      font-size: 13px;
+      color: #8b949e;
+      font-weight: bold;
+    }
+    .match-diff-footer strong {
+      color: #ffb703;
+      font-size: 14px;
+    }
+
+    /* CATEGORY TAB BUTTONS */
+    .tab-container {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 15px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 4px;
+      background: #161b22;
+      color: #8b949e;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .tab-btn.active {
+      background: #238636;
+      color: #ffffff;
+      border-color: #2ea043;
+    }
+
+    /* BOX / GRID STYLES */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    .box-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 15px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    /* TODAY UPDATED HIGHLIGHT */
+    .box-card.today-updated {
+      background: #1b2a1e !important;
+      border: 1.5px solid #2ea043 !important;
+      box-shadow: 0 0 10px rgba(46, 160, 67, 0.3);
+    }
+
+    /* SPECIAL STYLING FOR TOP 1 */
+    .box-card.top1 {
+      grid-column: span 2;
+      border: 2px solid #ffd700;
+      background: linear-gradient(135deg, #2a2100 0%, #161b22 100%);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
+      padding: 20px 15px;
+    }
+    .box-card.top1.today-updated {
+      background: linear-gradient(135deg, #2a2100 0%, #1b2a1e 100%) !important;
+      border: 2px solid #ffd700 !important;
+    }
+    .box-card.top1 .rank-num {
+      color: #ffd700;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .box-card.top1 .branch-name {
+      font-size: 18px;
+      color: #fff;
+    }
+    .box-card.top1 .count-badge {
+      background: linear-gradient(90deg, #ffb703, #fb8500);
+      color: #000;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .mubarak-text {
+      color: #ffb703;
+      font-size: 13px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    /* TOP 2 & TOP 3 STYLES */
+    .box-card.top2 { border: 2px solid #a5d6ff; background: #0f1824; }
+    .box-card.top3 { border: 2px solid #ffa657; background: #1f160e; }
+
+    .rank-num {
+      font-size: 13px;
+      font-weight: bold;
+      color: #8b949e;
+      margin-bottom: 5px;
+    }
+    .branch-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f0f6fc;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+    .count-badge {
+      background: #1f6feb;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 4px 12px;
+      border-radius: 15px;
+    }
+    .unit-text {
+      font-size: 13px;
+      color: #3fb950;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .today-text {
+      font-size: 12px;
+      color: #2ea043;
+      font-weight: bold;
+      margin-top: 6px;
+      background: rgba(46, 160, 67, 0.15);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* SUMMARY CARD (BOTTOM) */
+    .summary-card {
+      background: #161b22;
+      border: 1px solid #238636;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(35, 134, 54, 0.2);
+    }
+    .summary-title {
+      font-size: 13px;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .summary-total {
+      font-size: 24px;
+      color: #3fb950;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    .summary-details {
+      font-size: 12px;
+      color: #c9d1d9;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #30363d;
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- LOGIN BOX -->
+  <div id="login-box">
+    <h2>Login Required</h2>
+    <p style="color: #8b949e; font-size: 14px;">Enter credentials to view live ranking</p>
+    <input type="text" id="username" class="input-field" placeholder="User ID">
+    <input type="password" id="password" class="input-field" placeholder="Password">
+    <button class="btn" onclick="checkLogin()">Login</button>
+    <p id="error-msg">Invalid User ID or Password!</p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="header">
+      <h1>Modasa Telethon 2026</h1>
+      <p>Automatic Ranking Based on Google Sheet</p>
+    </div>
+
+    <!-- EDIT LINK FOR ADMIN -->
+    <a id="edit-link" href="https://docs.google.com/spreadsheets/d/1-7pjYbE3wIA836FOMOcFb10FdtGwQlnHU0y_-jDPIzM/edit" target="_blank" class="edit-btn">
+      ✏️ Edit Data in Google Sheet
+    </a>
+
+    <!-- TEAM MATCH CARD SECTION -->
+    <div class="match-card-wrapper" id="match-box">
+      <div class="match-title-header" id="match-title-text">⚔️ TEAM MATCH RESULT ⚔️</div>
+      <div class="match-versus-grid" id="match-grid-content">
+        <!-- Dynamic Match Data -->
+      </div>
+      <div class="match-diff-footer" id="match-diff-content">
+        Difference: <strong id="match-diff-val">₹0</strong>
+      </div>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="tab-container">
+      <button id="tab-all" class="tab-btn active" onclick="filterCategory('ALL')">ALL</button>
+      <button id="tab-short" class="tab-btn" onclick="filterCategory('SHORT TIME')">SHORT TIME</button>
+      <button id="tab-full" class="tab-btn" onclick="filterCategory('FULL TIME')">FULL TIME</button>
+      <button id="tab-dp" class="tab-btn" onclick="filterCategory('DP')">DP</button>
+    </div>
+
+    <!-- 2 COLUMN BOX GRID -->
+    <div class="card-grid" id="ranking-list">
+      <p style="text-align:center; grid-column: span 2;">Loading live data...</p>
+    </div>
+
+    <!-- TOTAL PERFORMANCE SUMMARY -->
+    <div class="summary-card" id="summary-box">
+      <div class="summary-title" id="summary-cat-title">TOTAL KAARKARDAGI (ALL)</div>
+      <div class="summary-total" id="total-amount">₹0</div>
+      <div class="summary-details">
+        <span>👥 Total: <strong id="total-staff" style="color:#58a6ff;">0</strong></span>
+        <span>⚡ Active Today: <strong id="active-staff" style="color:#2ea043;">0</strong></span>
+        <span>📦 Units: <strong id="total-units" style="color:#ffb703;">0</strong></span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  let allData = [];
+  let currentCategory = 'ALL';
+  let matchGroups = {};
+  let matchKeys = [];
+  let currentMatchIndex = 0;
+  let matchRotationTimer = null;
+
+  function checkLogin() {
+    var user = document.getElementById("username").value.trim();
+    var pass = document.getElementById("password").value.trim();
+
+    if (user === "admin" && pass === "123") {
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+      document.getElementById("edit-link").style.display = "block";
+      fetchSheetData();
+    } 
+    else if (user === "staff" && pass === "1234") {
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+      document.getElementById("edit-link").style.display = "none";
+      fetchSheetData();
+    } 
+    else {
+      document.getElementById("error-msg").style.display = "block";
+    }
+  }
+
+  function fetchSheetData() {
+    fetch("https://docs.google.com/spreadsheets/d/1-7pjYbE3wIA836FOMOcFb10FdtGwQlnHU0y_-jDPIzM/gviz/tq?tqx=out:csv")
+      .then(response => response.text())
+      .then(csvText => {
+        const rows = csvText.split('\n').map(row => row.split(','));
+        allData = [];
+        matchGroups = {};
+
+        for (let i = 1; i < rows.length; i++) {
+          if (rows[i].length >= 2) {
+            let name = rows[i][0] ? rows[i][0].replace(/"/g, '').trim() : '';
+            let count = rows[i][1] ? parseInt(rows[i][1].replace(/"/g, '').trim()) || 0 : 0;
+            let unit = rows[i][2] ? parseFloat(rows[i][2].replace(/"/g, '').trim()) || 0 : 0;
+            let category = rows[i][3] ? rows[i][3].replace(/"/g, '').trim().toUpperCase() : '';
+            let todayAmt = rows[i][4] ? parseInt(rows[i][4].replace(/"/g, '').trim()) || 0 : 0;
+            let matchTag = rows[i][6] ? rows[i][6].replace(/"/g, '').trim().toUpperCase() : '';
+            
+            if (name) {
+              let item = { name, count, unit, category, todayAmt, matchTag };
+              allData.push(item);
+
+              if (matchTag.startsWith('MATCH') || matchTag === 'YES') {
+                let tagKey = (matchTag === 'MATCH' || matchTag === 'YES') ? 'MATCH1' : matchTag;
+                if (!matchGroups[tagKey]) {
+                  matchGroups[tagKey] = [];
+                }
+                matchGroups[tagKey].push(item);
+              }
+            }
+          }
+        }
+
+        setupMatchesRotation();
+        renderCards();
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("ranking-list").innerHTML = "<p style='text-align:center; color:red; grid-column: span 2;'>Failed to load Google Sheet data.</p>";
+      });
+  }
+
+  function setupMatchesRotation() {
+    matchKeys = Object.keys(matchGroups).filter(key => matchGroups[key].length >= 2);
+
+    if (matchRotationTimer) {
+      clearInterval(matchRotationTimer);
+      matchRotationTimer = null;
+    }
+
+    if (matchKeys.length === 0) {
+      document.getElementById("match-box").style.display = "none";
+      return;
+    }
+
+    document.getElementById("match-box").style.display = "block";
+    
+    if (currentMatchIndex >= matchKeys.length) {
+      currentMatchIndex = 0;
+    }
+
+    renderCurrentMatch();
+
+    if (matchKeys.length > 1) {
+      matchRotationTimer = setInterval(() => {
+        currentMatchIndex = (currentMatchIndex + 1) % matchKeys.length;
+        renderCurrentMatch();
+      }, 5000); // Rotates every 5 seconds
+    }
+  }
+
+  function renderCurrentMatch() {
+    if (matchKeys.length === 0) return;
+
+    let key = matchKeys[currentMatchIndex];
+    let members = [...matchGroups[key]];
+    members.sort((a, b) => b.count - a.count);
+
+    let winner = members[0];
+    let runner = members[1];
+    let diff = winner.count - runner.count;
+
+    let matchLabel = matchKeys.length > 1 ? `⚔️ TEAM MATCH (${key}) ⚔️` : `⚔️ TEAM MATCH RESULT ⚔️`;
+    document.getElementById("match-title-text").innerText = matchLabel;
+
+    const gridContent = document.getElementById("match-grid-content");
+    gridContent.innerHTML = `
+      <div class="match-user-box winner">
+        <div class="match-user-name">👑 ${winner.name}</div>
+        <div class="match-user-amt">₹${winner.count.toLocaleString('en-IN')}</div>
+        <div class="winner-tag">WINNER</div>
+      </div>
+      <div class="match-user-box">
+        <div class="match-user-name">${runner.name}</div>
+        <div class="match-user-amt">₹${runner.count.toLocaleString('en-IN')}</div>
+      </div>
+    `;
+
+    document.getElementById("match-diff-val").innerText = `₹${diff.toLocaleString('en-IN')}`;
+  }
+
+  function filterCategory(cat) {
+    currentCategory = cat;
+    
+    document.getElementById("tab-all").classList.remove("active");
+    document.getElementById("tab-short").classList.remove("active");
+    document.getElementById("tab-full").classList.remove("active");
+    document.getElementById("tab-dp").classList.remove("active");
+
+    if (cat === 'ALL') document.getElementById("tab-all").classList.add("active");
+    if (cat === 'SHORT TIME') document.getElementById("tab-short").classList.add("active");
+    if (cat === 'FULL TIME') document.getElementById("tab-full").classList.add("active");
+    if (cat === 'DP') document.getElementById("tab-dp").classList.add("active");
+
+    renderCards();
+  }
+
+  function renderCards() {
+    let filtered = allData;
+    if (currentCategory !== 'ALL') {
+      filtered = allData.filter(item => item.category === currentCategory);
+    }
+
+    let totalAmt = 0;
+    let totalUn = 0;
+    let activeStaffCount = 0;
+
+    filtered.forEach(item => {
+      totalAmt += item.count;
+      totalUn += item.unit;
+      if (item.todayAmt > 0) {
+        activeStaffCount++;
+      }
+    });
+
+    document.getElementById("summary-cat-title").innerText = `TOTAL KAARKARDAGI (${currentCategory})`;
+    document.getElementById("total-amount").innerText = `₹${totalAmt.toLocaleString('en-IN')}`;
+    document.getElementById("total-staff").innerText = filtered.length;
+    document.getElementById("active-staff").innerText = activeStaffCount;
+    document.getElementById("total-units").innerText = totalUn.toFixed(2);
+
+    filtered.sort((a, b) => b.count - a.count);
+
+    const listContainer = document.getElementById("ranking-list");
+    listContainer.innerHTML = "";
+
+    if (filtered.length === 0) {
+      listContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#8b949e;'>No entries found in this category.</p>";
+      return;
+    }
+
+    filtered.forEach((item, index) => {
+      let topClass = "";
+      let rankText = `#${index + 1}`;
+      let mubarakHtml = "";
+      let todayClass = item.todayAmt > 0 ? "today-updated" : "";
+
+      if (index === 0) {
+        topClass = "top1";
+        rankText = "👑 #1 TOP RANK";
+        mubarakHtml = `<div class="mubarak-text">🎉 Aap ko bohot bohot mubarakbaad! 🎉</div>`;
+      }
+      else if (index === 1) topClass = "top2";
+      else if (index === 2) topClass = "top3";
+
+      const card = document.createElement("div");
+      card.className = `box-card ${topClass} ${todayClass}`;
+      card.innerHTML = `
+        <div class="rank-num">${rankText}</div>
+        <div class="branch-name">${item.name}</div>
+        <div class="count-badge">₹${item.count.toLocaleString('en-IN')}</div>
+        ${item.unit ? `<div class="unit-text">Unit: ${item.unit}</div>` : ''}
+        ${item.todayAmt > 0 ? `<div class="today-text">Today: +₹${item.todayAmt.toLocaleString('en-IN')}</div>` : ''}
+        ${mubarakHtml}
+      `;
+      listContainer.appendChild(card);
+    });
+  }
+</script>
+
+</body>
+</html>
